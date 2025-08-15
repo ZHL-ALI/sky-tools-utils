@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Tools 示例</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .demo {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sky Tools 工具函数库示例</h1>
+        
+        <div class="section">
+            <h2>字符串工具</h2>
+            <button onclick="testStringUtils()">测试字符串工具</button>
+            <div id="string-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>数组工具</h2>
+            <button onclick="testArrayUtils()">测试数组工具</button>
+            <div id="array-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>日期工具</h2>
+            <button onclick="testDateUtils()">测试日期工具</button>
+            <div id="date-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>数字工具</h2>
+            <button onclick="testNumberUtils()">测试数字工具</button>
+            <div id="number-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>验证工具</h2>
+            <button onclick="testValidatorUtils()">测试验证工具</button>
+            <div id="validator-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>URL 工具</h2>
+            <button onclick="testUrlUtils()">测试 URL 工具</button>
+            <div id="url-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- 引入构建后的 UMD 版本 -->
+    <script src="../dist/index.umd.js"></script>
+    <script>
+        function testStringUtils() {
+            const result = document.getElementById('string-result');
+            const tests = [
+                `capitalize('hello world') = ${SkyTools.string.capitalize('hello world')}`,
+                `camelCase('hello-world') = ${SkyTools.string.camelCase('hello-world')}`,
+                `kebabCase('helloWorld') = ${SkyTools.string.kebabCase('helloWorld')}`,
+                `truncate('这是一个很长的字符串', 8) = ${SkyTools.string.truncate('这是一个很长的字符串', 8)}`,
+                `randomString(10) = ${SkyTools.string.randomString(10)}`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+
+        function testArrayUtils() {
+            const result = document.getElementById('array-result');
+            const arr = [1, 2, 2, 3, 4, 4, 5];
+            const tests = [
+                `unique([1, 2, 2, 3, 4, 4, 5]) = [${SkyTools.array.unique(arr)}]`,
+                `chunk([1, 2, 3, 4, 5, 6], 2) = ${JSON.stringify(SkyTools.array.chunk([1, 2, 3, 4, 5, 6], 2))}`,
+                `shuffle([1, 2, 3, 4, 5]) = [${SkyTools.array.shuffle([1, 2, 3, 4, 5])}]`,
+                `intersection([1, 2, 3], [2, 3, 4]) = [${SkyTools.array.intersection([1, 2, 3], [2, 3, 4])}]`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+
+        function testDateUtils() {
+            const result = document.getElementById('date-result');
+            const now = new Date();
+            const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            const tests = [
+                `formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss') = ${SkyTools.date.formatDate(now, 'YYYY-MM-DD HH:mm:ss')}`,
+                `getRelativeTime(昨天) = ${SkyTools.date.getRelativeTime(yesterday)}`,
+                `isToday(new Date()) = ${SkyTools.date.isToday(now)}`,
+                `addTime(now, 7, 'day') = ${SkyTools.date.formatDate(SkyTools.date.addTime(now, 7, 'day'), 'YYYY-MM-DD')}`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+
+        function testNumberUtils() {
+            const result = document.getElementById('number-result');
+            const tests = [
+                `formatNumber(1234567) = ${SkyTools.number.formatNumber(1234567)}`,
+                `randomNumber(1, 100) = ${SkyTools.number.randomNumber(1, 100)}`,
+                `toFixed(3.14159, 2) = ${SkyTools.number.toFixed(3.14159, 2)}`,
+                `isEven(4) = ${SkyTools.number.isEven(4)}`,
+                `percentage(25, 100) = ${SkyTools.number.percentage(25, 100)}%`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+
+        function testValidatorUtils() {
+            const result = document.getElementById('validator-result');
+            const tests = [
+                `isEmail('test@example.com') = ${SkyTools.validator.isEmail('test@example.com')}`,
+                `isPhone('13800138000') = ${SkyTools.validator.isPhone('13800138000')}`,
+                `isUrl('https://www.example.com') = ${SkyTools.validator.isUrl('https://www.example.com')}`,
+                `isNumeric('12345') = ${SkyTools.validator.isNumeric('12345')}`,
+                `isChinese('中文测试') = ${SkyTools.validator.isChinese('中文测试')}`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+
+        function testUrlUtils() {
+            const result = document.getElementById('url-result');
+            const testUrl = 'https://example.com?name=test&age=25';
+            const tests = [
+                `parseUrlParams('${testUrl}') = ${JSON.stringify(SkyTools.url.parseUrlParams(testUrl))}`,
+                `buildUrlParams({name: 'john', age: 30}) = ${SkyTools.url.buildUrlParams({name: 'john', age: 30})}`,
+                `isValidUrl('https://www.example.com') = ${SkyTools.url.isValidUrl('https://www.example.com')}`,
+                `addUrlParams('https://example.com', {foo: 'bar'}) = ${SkyTools.url.addUrlParams('https://example.com', {foo: 'bar'})}`
+            ];
+            result.innerHTML = tests.join('<br>');
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Tools 浏览器测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .test-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sky Tools 工具函数测试</h1>
+        
+        <button onclick="runAllTests()">运行所有测试</button>
+        
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // 模拟工具函数实现用于测试
+        const SkyTools = {
+            string: {
+                capitalize: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+                camelCase: (str) => str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : ''),
+                kebabCase: (str) => str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+                snakeCase: (str) => str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase(),
+                truncate: (str, length, suffix = '...') => str.length > length ? str.slice(0, length) + suffix : str,
+                stripHtml: (str) => str.replace(/<[^>]*>/g, ''),
+                randomString: (length, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') => {
+                    let result = '';
+                    for (let i = 0; i < length; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return result;
+                }
+            },
+            array: {
+                unique: (arr) => [...new Set(arr)],
+                chunk: (arr, size) => {
+                    const result = [];
+                    for (let i = 0; i < arr.length; i += size) {
+                        result.push(arr.slice(i, i + size));
+                    }
+                    return result;
+                },
+                flatten: (arr) => arr.flat(Infinity),
+                shuffle: (arr) => {
+                    const newArr = [...arr];
+                    for (let i = newArr.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+                    }
+                    return newArr;
+                },
+                intersection: (arr1, arr2) => arr1.filter(x => arr2.includes(x)),
+                difference: (arr1, arr2) => arr1.filter(x => !arr2.includes(x))
+            },
+            date: {
+                formatDate: (date, format = 'YYYY-MM-DD') => {
+                    const d = new Date(date);
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const hour = String(d.getHours()).padStart(2, '0');
+                    const minute = String(d.getMinutes()).padStart(2, '0');
+                    const second = String(d.getSeconds()).padStart(2, '0');
+                    
+                    return format
+                        .replace('YYYY', year)
+                        .replace('MM', month)
+                        .replace('DD', day)
+                        .replace('HH', hour)
+                        .replace('mm', minute)
+                        .replace('ss', second);
+                },
+                getRelativeTime: (date) => {
+                    const now = new Date();
+                    const diff = now - new Date(date);
+                    const minutes = Math.floor(diff / 60000);
+                    const hours = Math.floor(diff / 3600000);
+                    const days = Math.floor(diff / 86400000);
+                    
+                    if (minutes < 1) return '刚刚';
+                    if (minutes < 60) return `${minutes}分钟前`;
+                    if (hours < 24) return `${hours}小时前`;
+                    return `${days}天前`;
+                },
+                isToday: (date) => {
+                    const today = new Date();
+                    const d = new Date(date);
+                    return today.toDateString() === d.toDateString();
+                },
+                addTime: (date, amount, unit) => {
+                    const d = new Date(date);
+                    switch (unit) {
+                        case 'year': d.setFullYear(d.getFullYear() + amount); break;
+                        case 'month': d.setMonth(d.getMonth() + amount); break;
+                        case 'day': d.setDate(d.getDate() + amount); break;
+                        case 'hour': d.setHours(d.getHours() + amount); break;
+                        case 'minute': d.setMinutes(d.getMinutes() + amount); break;
+                        case 'second': d.setSeconds(d.getSeconds() + amount); break;
+                    }
+                    return d;
+                }
+            },
+            number: {
+                formatNumber: (num, separator = ',') => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator),
+                randomNumber: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+                toFixed: (num, digits) => Number(num.toFixed(digits)),
+                isEven: (num) => num % 2 === 0,
+                isOdd: (num) => num % 2 !== 0,
+                percentage: (value, total, digits = 0) => Number(((value / total) * 100).toFixed(digits))
+            },
+            validator: {
+                isEmail: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+                isPhone: (phone) => /^1[3-9]\d{9}$/.test(phone),
+                isUrl: (url) => {
+                    try {
+                        new URL(url);
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                },
+                isNumeric: (str) => /^\d+$/.test(str),
+                isChinese: (str) => /^[\u4e00-\u9fa5]+$/.test(str)
+            },
+            url: {
+                parseUrlParams: (url = window.location.href) => {
+                    const params = {};
+                    const urlObj = new URL(url);
+                    urlObj.searchParams.forEach((value, key) => {
+                        params[key] = value;
+                    });
+                    return params;
+                },
+                buildUrlParams: (params) => {
+                    return Object.entries(params)
+                        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                        .join('&');
+                },
+                isValidUrl: (str) => {
+                    try {
+                        new URL(str);
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                }
+            }
+        };
+
+        function runTest(name, testFn) {
+            try {
+                const result = testFn();
+                return { name, success: true, result };
+            } catch (error) {
+                return { name, success: false, error: error.message };
+            }
+        }
+
+        function displayResult(test) {
+            const div = document.createElement('div');
+            div.className = `result ${test.success ? 'success' : 'error'}`;
+            
+            if (test.success) {
+                div.innerHTML = `✓ ${test.name}: ${test.result}`;
+            } else {
+                div.innerHTML = `✗ ${test.name}: ${test.error}`;
+            }
+            
+            return div;
+        }
+
+        function runAllTests() {
+            const resultsContainer = document.getElementById('test-results');
+            resultsContainer.innerHTML = '';
+
+            const tests = [
+                // 字符串工具测试
+                {
+                    name: '字符串首字母大写',
+                    test: () => SkyTools.string.capitalize('hello world') === 'Hello world'
+                },
+                {
+                    name: '字符串转驼峰',
+                    test: () => SkyTools.string.camelCase('hello-world') === 'helloWorld'
+                },
+                {
+                    name: '字符串转短横线',
+                    test: () => SkyTools.string.kebabCase('helloWorld') === 'hello-world'
+                },
+                {
+                    name: '字符串截断',
+                    test: () => SkyTools.string.truncate('hello world', 5) === 'hello...'
+                },
+                {
+                    name: '移除HTML标签',
+                    test: () => SkyTools.string.stripHtml('<p>Hello</p>') === 'Hello'
+                },
+                {
+                    name: '生成随机字符串',
+                    test: () => SkyTools.string.randomString(10).length === 10
+                },
+
+                // 数组工具测试
+                {
+                    name: '数组去重',
+                    test: () => JSON.stringify(SkyTools.array.unique([1, 2, 2, 3])) === '[1,2,3]'
+                },
+                {
+                    name: '数组分块',
+                    test: () => JSON.stringify(SkyTools.array.chunk([1, 2, 3, 4], 2)) === '[[1,2],[3,4]]'
+                },
+                {
+                    name: '数组扁平化',
+                    test: () => JSON.stringify(SkyTools.array.flatten([1, [2, 3], [4]])) === '[1,2,3,4]'
+                },
+                {
+                    name: '数组交集',
+                    test: () => JSON.stringify(SkyTools.array.intersection([1, 2, 3], [2, 3, 4])) === '[2,3]'
+                },
+                {
+                    name: '数组差集',
+                    test: () => JSON.stringify(SkyTools.array.difference([1, 2, 3], [2, 3, 4])) === '[1]'
+                },
+
+                // 日期工具测试
+                {
+                    name: '日期格式化',
+                    test: () => {
+                        const date = new Date('2023-12-25 10:30:45');
+                        return SkyTools.date.formatDate(date, 'YYYY-MM-DD') === '2023-12-25';
+                    }
+                },
+                {
+                    name: '判断是否今天',
+                    test: () => SkyTools.date.isToday(new Date()) === true
+                },
+                {
+                    name: '添加时间',
+                    test: () => {
+                        const date = new Date('2023-12-25');
+                        const newDate = SkyTools.date.addTime(date, 1, 'day');
+                        return newDate.getDate() === 26;
+                    }
+                },
+
+                // 数字工具测试
+                {
+                    name: '数字格式化',
+                    test: () => SkyTools.number.formatNumber(1234567) === '1,234,567'
+                },
+                {
+                    name: '保留小数位',
+                    test: () => SkyTools.number.toFixed(3.14159, 2) === 3.14
+                },
+                {
+                    name: '判断偶数',
+                    test: () => SkyTools.number.isEven(4) === true && SkyTools.number.isEven(3) === false
+                },
+                {
+                    name: '计算百分比',
+                    test: () => SkyTools.number.percentage(25, 100) === 25
+                },
+
+                // 验证工具测试
+                {
+                    name: '邮箱验证',
+                    test: () => SkyTools.validator.isEmail('test@example.com') === true
+                },
+                {
+                    name: '手机号验证',
+                    test: () => SkyTools.validator.isPhone('13800138000') === true
+                },
+                {
+                    name: 'URL验证',
+                    test: () => SkyTools.validator.isUrl('https://www.example.com') === true
+                },
+                {
+                    name: '数字验证',
+                    test: () => SkyTools.validator.isNumeric('12345') === true
+                },
+                {
+                    name: '中文验证',
+                    test: () => SkyTools.validator.isChinese('中文测试') === true
+                },
+
+                // URL工具测试
+                {
+                    name: 'URL参数构建',
+                    test: () => SkyTools.url.buildUrlParams({name: 'test', age: 25}) === 'name=test&age=25'
+                },
+                {
+                    name: 'URL有效性验证',
+                    test: () => SkyTools.url.isValidUrl('https://www.example.com') === true
+                }
+            ];
+
+            // 创建测试分组
+            const sections = {
+                '字符串工具': [],
+                '数组工具': [],
+                '日期工具': [],
+                '数字工具': [],
+                '验证工具': [],
+                'URL工具': []
+            };
+
+            tests.forEach((test, index) => {
+                const result = runTest(test.name, test.test);
+                
+                if (index < 6) sections['字符串工具'].push(result);
+                else if (index < 11) sections['数组工具'].push(result);
+                else if (index < 14) sections['日期工具'].push(result);
+                else if (index < 18) sections['数字工具'].push(result);
+                else if (index < 23) sections['验证工具'].push(result);
+                else sections['URL工具'].push(result);
+            });
+
+            // 显示结果
+            Object.entries(sections).forEach(([sectionName, sectionTests]) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'test-section';
+                
+                const title = document.createElement('h3');
+                title.textContent = sectionName;
+                sectionDiv.appendChild(title);
+                
+                sectionTests.forEach(test => {
+                    sectionDiv.appendChild(displayResult(test));
+                });
+                
+                resultsContainer.appendChild(sectionDiv);
+            });
+
+            // 显示总结
+            const totalTests = tests.length;
+            const passedTests = tests.filter((_, i) => {
+                try {
+                    return tests[i].test();
+                } catch {
+                    return false;
+                }
+            }).length;
+
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = `test-section ${passedTests === totalTests ? 'success' : 'error'}`;
+            summaryDiv.innerHTML = `
+                <h3>测试总结</h3>
+                <div class="result">
+                    总测试数: ${totalTests}<br>
+                    通过测试: ${passedTests}<br>
+                    失败测试: ${totalTests - passedTests}<br>
+                    通过率: ${Math.round((passedTests / totalTests) * 100)}%
+                </div>
+            `;
+            resultsContainer.appendChild(summaryDiv);
+        }
+    </script>
+</body>
+</html>

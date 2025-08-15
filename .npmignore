@@ -1,0 +1,21 @@
+# 源代码
+src/
+examples/
+coverage/
+
+# 配置文件
+.eslintrc.js
+jest.config.js
+rollup.config.js
+tsconfig.json
+
+# 开发文件
+*.test.ts
+*.spec.ts
+__tests__/
+
+# 其他
+.git/
+node_modules/
+.DS_Store
+*.log
