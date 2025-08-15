@@ -1,6 +1,6 @@
 {
   "name": "sky-tools-utils",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "一个现代化的前端工具函数库，提供丰富的实用工具函数",
   "type": "module",
   "main": "dist/index.js",
