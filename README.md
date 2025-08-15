@@ -28,18 +28,18 @@
 ### NPM 安装
 
 ```bash
-npm install sky-tools
+npm install sky-tools-utils
 ```
 
 ### CDN 引入
 
 ```html
 <!-- UMD 版本 -->
-<script src="https://unpkg.com/sky-tools/dist/index.umd.js"></script>
+<script src="https://unpkg.com/sky-tools-utils/dist/index.umd.js"></script>
 
 <!-- ES Module 版本 -->
 <script type="module">
-  import { capitalize } from 'https://unpkg.com/sky-tools/dist/index.esm.js';
+  import { capitalize } from 'https://unpkg.com/sky-tools-utils/dist/index.esm.js';
 </script>
 ```
 
@@ -49,10 +49,10 @@ npm install sky-tools
 
 ```javascript
 // 按需引入
-import { capitalize, unique, formatDate } from 'sky-tools';
+import { capitalize, unique, formatDate } from 'sky-tools-utils';
 
 // 全量引入
-import SkyTools from 'sky-tools';
+import SkyTools from 'sky-tools-utils';
 
 console.log(capitalize('hello world')); // Hello world
 console.log(unique([1, 2, 2, 3])); // [1, 2, 3]
@@ -61,15 +61,15 @@ console.log(unique([1, 2, 2, 3])); // [1, 2, 3]
 ### CommonJS
 
 ```javascript
-const { capitalize, unique } = require('sky-tools');
+const { capitalize, unique } = require('sky-tools-utils');
 // 或
-const SkyTools = require('sky-tools');
+const SkyTools = require('sky-tools-utils');
 ```
 
 ### UMD (浏览器直接引入)
 
 ```html
-<script src="https://unpkg.com/sky-tools/dist/index.umd.js"></script>
+<script src="https://unpkg.com/sky-tools-utils/dist/index.umd.js"></script>
 <script>
   console.log(SkyTools.string.capitalize('hello')); // Hello
   console.log(SkyTools.array.unique([1, 2, 2, 3])); // [1, 2, 3]
@@ -187,7 +187,7 @@ const SkyTools = require('sky-tools');
 import { 
   capitalize, unique, formatDate, 
   debounce, isEmail, formatNumber 
-} from 'sky-tools';
+} from 'sky-tools-utils';
 
 // 字符串处理
 capitalize('hello world'); // "Hello world"

@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash
-npm install sky-tools
+npm install sky-tools-utils
 ```
 
 ## 使用方式
@@ -14,26 +14,26 @@ npm install sky-tools
 
 ```javascript
 // 按需导入
-import { capitalize, unique, formatDate } from 'sky-tools';
+import { capitalize, unique, formatDate } from 'sky-tools-utils';
 
 // 命名空间导入
-import { string, array, date } from 'sky-tools';
+import { string, array, date } from 'sky-tools-utils';
 
 // 默认导入
-import SkyTools from 'sky-tools';
+import SkyTools from 'sky-tools-utils';
 ```
 
 ### 2. CommonJS 方式
 
 ```javascript
-const { capitalize, unique, formatDate } = require('sky-tools');
-const SkyTools = require('sky-tools').default;
+const { capitalize, unique, formatDate } = require('sky-tools-utils');
+const SkyTools = require('sky-tools-utils').default;
 ```
 
 ### 3. UMD 方式（浏览器）
 
 ```html
-<script src="https://unpkg.com/sky-tools/dist/index.umd.js"></script>
+<script src="https://unpkg.com/sky-tools-utils/dist/index.umd.js"></script>
 <script>
   console.log(SkyTools.string.capitalize('hello'));
 </script>
@@ -482,7 +482,7 @@ isBankCard('1234567890123456'); // true
 本库完全支持 TypeScript，提供完整的类型定义：
 
 ```typescript
-import { unique, formatDate, isEmail } from 'sky-tools';
+import { unique, formatDate, isEmail } from 'sky-tools-utils';
 
 const numbers: number[] = unique([1, 2, 2, 3]); // 类型推断为 number[]
 const dateStr: string = formatDate(new Date()); // 类型为 string

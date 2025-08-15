@@ -1,6 +1,6 @@
 {
   "name": "sky-tools-utils",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "一个现代化的前端工具函数库，提供丰富的实用工具函数",
   "type": "module",
   "main": "dist/index.js",
@@ -65,10 +65,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhangli33445/sky-tools.git"
+    "url": "git+https://github.com/ZHL-ALI/sky-tools-utils"
   },
   "bugs": {
-    "url": "https://github.com/zhangli33445/sky-tools/issues"
+    "url": "https://github.com/ZHL-ALI/sky-tools-utils/issues"
   },
-  "homepage": "https://github.com/zhangli33445/sky-tools#readme"
+  "homepage": "https://github.com/ZHL-ALI/sky-tools-utils"
 }
